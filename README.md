@@ -5,4 +5,21 @@ Testing has been a feature of the Ruby community for a long time. Why then are o
 
 # Getting Started
 
+```bash
+> git clone https://github.com/jesse-spevack/clean_rspec.git
+> cd clean_rspec
+> bundle install
 ```
+
+# Running Tests
+
+```bash
+> rspec
+```
+
+# References
+
+This workshop is based off of the [Gilded Rose Refactoring Kata](https://github.com/NotMyself/GildedRose).
+
+We are using a [Ruby translation](https://github.com/clayhill/Gilded-Rose-Refactoring-Kata) following the style from the amazing [Sandi Metz](https://sandimetz.com/) 2014 Railsconf talk, [All the Little Things](https://youtu.be/8bZh5LMaSmE).
+
