@@ -59,3 +59,36 @@ Participants will hone their understanding of writing clean tests by refactoring
 | Shared Examples and Contexts | 0    |
 | Test Doubles                 | 5    |
 |                              |      |
+
+## System Under Test
+
+```ruby
+class GildedRose
+  # ...
+end
+
+# Bad
+describe GildedRose do
+  it 'is instantiated by RSpec' do
+    expect(subject).to be_a GildedRose
+  end
+end
+
+# Less Bad
+describe GildedRose do
+  subject { GildedRose.new }
+
+  it 'is instantiated by RSpec' do
+    expect(subject).to be_a GildedRose
+  end
+end
+
+# Good
+describe GildedRose do
+  subject(:gilded_rose) { GildedRose.new }
+
+  it 'is instantiated by RSpec' do
+    expect(gilded_rose).to be_a GildedRose
+  end
+end
+```

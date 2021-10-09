@@ -2,8 +2,22 @@ require "spec_helper"
 require "./lib/gilded_rose"
 
 RSpec.describe GildedRose do
+  it "is a gilded rose" do
+    expect(subject).to be_a(GildedRose)
+  end
+
+  shared_examples :gilded_rose do |name, days_remaining, quality, expected_days_remaining, expected_quality|
+    it 'ticks' do
+      gilded_rose = GildedRose.new(name: name, days_remaining: days_remaining, quality: quality)
+      gilded_rose.tick
+      expect(gilded_rose).to have_attributes(days_remaining: expected_days_remaining, quality: expected_quality)
+    end
+  end
+
   it "normal item before sell date" do
     gilded_rose = GildedRose.new(name: "Normal Item", days_remaining: 5, quality: 10)
+    gilded_rose2 = GildedRose.new(name: "Normal Item", days_remaining: -1, quality: 8)
+    gilded_rose3 = GildedRose.new(name: "Normal Item", days_remaining: 1, quality: 12)
 
     gilded_rose.tick
 
@@ -13,9 +27,12 @@ RSpec.describe GildedRose do
   it "normal item on sell date" do
     gilded_rose = GildedRose.new(name: "Normal Item", days_remaining: 0, quality: 10)
 
+    expect(gilded_rose).to be_instance_of(GildedRose) 
+
     gilded_rose.tick
 
-    expect(gilded_rose).to have_attributes(days_remaining: -1, quality: 8)
+    expect(gilded_rose.days_remaining).to eq(-1)
+    expect(gilded_rose.quality).to eq(8)
   end
 
   it "normal item on sell date" do
@@ -42,61 +59,13 @@ RSpec.describe GildedRose do
     expect(gilded_rose).to have_attributes(days_remaining: 4, quality: 0)
   end
 
-  it "aged brie before sell date" do
-    gilded_rose = GildedRose.new(name: "Aged Brie", days_remaining: 5, quality: 10)
-
-    gilded_rose.tick
-
-    expect(gilded_rose).to have_attributes(days_remaining: 4, quality: 11)
-  end
-
-  it "aged brie with max quality" do
-    gilded_rose = GildedRose.new(name: "Aged Brie", days_remaining: 5, quality: 50)
-
-    gilded_rose.tick
-
-    expect(gilded_rose).to have_attributes(days_remaining: 4, quality: 50)
-  end
-
-  it "aged brie on sell date" do
-    gilded_rose = GildedRose.new(name: "Aged Brie", days_remaining: 0, quality: 10)
-
-    gilded_rose.tick
-
-    expect(gilded_rose).to have_attributes(days_remaining: -1, quality: 12)
-  end
-
-  it "aged brie on sell date near max quality" do
-    gilded_rose = GildedRose.new(name: "Aged Brie", days_remaining: 0, quality: 49)
-
-    gilded_rose.tick
-
-    expect(gilded_rose).to have_attributes(days_remaining: -1, quality: 50)
-  end
-
-  it "aged brie on sell date with max quality" do
-    gilded_rose = GildedRose.new(name: "Aged Brie", days_remaining: 0, quality: 50)
-
-    gilded_rose.tick
-
-    expect(gilded_rose).to have_attributes(days_remaining: -1, quality: 50)
-  end
-
-  it "aged brie after sell date" do
-    gilded_rose = GildedRose.new(name: "Aged Brie", days_remaining: -10, quality: 10)
-
-    gilded_rose.tick
-
-    expect(gilded_rose).to have_attributes(days_remaining: -11, quality: 12)
-  end
-
-  it "aged brie after sell date with max quality" do
-    gilded_rose = GildedRose.new(name: "Aged Brie", days_remaining: -10, quality: 50)
-
-    gilded_rose.tick
-
-    expect(gilded_rose).to have_attributes(days_remaining: -11, quality: 50)
-  end
+  it_behaves_like :gilded_rose, "Aged Brie", 5, 10, 4, 11
+  it_behaves_like :gilded_rose, "Aged Brie", 5, 50, 4, 50
+  it_behaves_like :gilded_rose, "Aged Brie", 0, 10, -1, 12
+  it_behaves_like :gilded_rose, "Aged Brie", 0, 49, -1, 50
+  it_behaves_like :gilded_rose, "Aged Brie", 0, 50, -1, 50
+  it_behaves_like :gilded_rose, "Aged Brie", -10, 10, -11, 12
+  it_behaves_like :gilded_rose, "Aged Brie", -10, 50, -11, 50
 
   it "sulfuras before sell date" do
     gilded_rose = GildedRose.new(name: "Sulfuras, Hand of Ragnaros", days_remaining: 5, quality: 80)
@@ -212,7 +181,7 @@ RSpec.describe GildedRose do
 
   it "backstage passes after sell date" do
     gilded_rose = GildedRose.new(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: -10, quality: 10)
-
+# 
     gilded_rose.tick
 
     expect(gilded_rose).to have_attributes(days_remaining: -11, quality: 0)
@@ -265,4 +234,5 @@ RSpec.describe GildedRose do
 
     expect(gilded_rose).to have_attributes(days_remaining: -11, quality: 0)
   end
+
 end
