@@ -62,6 +62,8 @@ Participants will hone their understanding of writing clean tests by refactoring
 
 ## System Under Test
 
+The subject keyword can be used to identify the system under test
+
 ```ruby
 class GildedRose
   # ...
@@ -92,3 +94,5 @@ describe GildedRose do
   end
 end
 ```
+
+## Describe, Context, It
