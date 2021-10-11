@@ -15,9 +15,9 @@ RSpec.describe GildedRose do
   end
 
   it "normal item before sell date" do
-    gilded_rose = GildedRose.new(name: "Normal Item", days_remaining: 5, quality: 10)
-    gilded_rose2 = GildedRose.new(name: "Normal Item", days_remaining: -1, quality: 8)
-    gilded_rose3 = GildedRose.new(name: "Normal Item", days_remaining: 1, quality: 12)
+    gr = GildedRose.new(name: "Normal Item", days_remaining: 5, quality: 10)
+    gr2 = GildedRose.new(name: "Normal Item", days_remaining: -1, quality: 8)
+    gr3 = GildedRose.new(name: "Normal Item", days_remaining: 1, quality: 12)
 
     gilded_rose.tick
 

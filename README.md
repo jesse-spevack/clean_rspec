@@ -51,8 +51,8 @@ Participants will hone their understanding of writing clean tests by refactoring
 | System Under Test            | 15   |
 | Describe, Context, It        | 25   |
 | 🍅 Break                       |      |
-| Optimizing for Readability   | 0    |
-| Phases of Test               | 10   |
+| Phases of Test               | 0   |
+| Optimizing for Readability   | 10    |
 | Mystery Guest                | 20   |
 | Bad Names                    | 25   |
 | 🍅 Break                       |      |
@@ -62,7 +62,7 @@ Participants will hone their understanding of writing clean tests by refactoring
 
 ## System Under Test
 
-The subject keyword can be used to identify the system under test
+The subject keyword can be used to identify the system under test.
 
 ```ruby
 class GildedRose
@@ -96,3 +96,140 @@ end
 ```
 
 ## Describe, Context, It
+
+The `describe` method creates an example group.
+
+```ruby
+# Bad
+RSpec.describe GildedRose do
+  # ...
+end
+
+# Good
+RSpec.describe GildedRose do
+  describe '#tick' do
+    # ...
+  end
+end
+```
+
+Example groups can have examples.
+
+```ruby
+# Bad
+RSpec.describe GildedRose do
+  describe '#tick' do
+    it 'ticks' do
+      # ...
+    end
+  end
+end
+
+# Good
+RSpec.describe GildedRose do
+  describe '#tick' do
+    it 'updates days remaining and quality' do
+      # ...
+    end
+  end
+end
+```
+
+Example groups can have contexts with specific examples.
+
+```ruby
+# Bad
+RSpec.describe GildedRose do
+  describe '#tick' do
+    it 'updates days remaining and quality for normal item' do
+      # ...
+    end
+
+    it 'updates days remaining and quality for sulfuras item' do
+      # ...
+    end
+  end
+end
+
+# Good
+RSpec.describe GildedRose do
+  describe '#tick' do
+    context 'when given a normal item' do
+      it 'updates days remaining and quality' do
+        # ...
+      end
+    end
+
+    context 'when given a sulfuras item' do
+      it 'updates days remaining and quality' do
+        # ...
+      end
+    end
+  end
+end
+```
+
+## Phases of test
+
+Tests should have three phases: arrange, act, assert.
+
+### Arrange
+
+Setup the objects necessary for the test.
+
+```ruby
+# Bad
+describe '#tick' do
+  context 'when given a normal item' do
+    it 'updates days remaining and quality' do
+      gr = GildedRose.new(name: 'Normal Item', days_remaining: 5, quality: 10)
+      gr2 = GildedRose.new(name: 'Sulfuras, Hand of Ragnaros', days_remaining: 5, quality: 10)
+      # ...
+    end
+  end
+end
+
+# Less Bad
+describe '#tick' do
+  context 'when given a normal item' do
+    it 'updates days remaining and quality' do
+      gilded_rose = GildedRose.new(name: 'Normal Item', days_remaining: 5, quality: 10)
+      # ...
+    end
+  end
+end
+
+# Good
+describe '#tick' do
+  context 'when given a normal item' do
+    let(:gilded_rose) { GildedRose.new(...) }
+
+    it 'updates days remaining and quality' do
+      # ...
+    end
+  end
+end
+
+# Also Good
+describe '#tick' do
+  subject(:gilded_rose) { described_class.new(name: name, days_remaining: days_remaining, quality: quality) }
+
+  context 'when given a normal item' do
+    let(:name) { 'Normal Item' }
+    let(:days_remaining) { 0 }
+    let(:quality) { 10 }
+
+    it 'updates days remaining and quality' do
+      # ...
+    end
+  end
+end
+```
+
+### Act
+
+Invoke the action that is being tested.
+
+### Assert
+
+Check the result of the action.

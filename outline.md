@@ -76,6 +76,8 @@ Participants will hone their understanding of writing clean tests by refactoring
 ## System Under Test
 - System under test - the thing being tested for correct behavior
 - RSpec gives us the `subject` keyword
+  - [stackoverflow](https://stackoverflow.com/questions/38437162/whats-the-difference-between-rspecs-subject-and-let-when-should-they-be-used) on `subject`
+- 
 
 ## Describe, Context, It
 
