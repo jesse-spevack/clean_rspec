@@ -49,9 +49,10 @@ Participants will hone their understanding of writing clean tests by refactoring
 | Why Testing                  | 5    |
 | Setup                        | 10   |
 | System Under Test            | 15   |
+| 🍅 Break                      | 5    |
 | Describe, Context, It        | 25   |
-| 🍅 Break                       |      |
-| Phases of Test               | 0   |
+| Phases of Test               | 0    |
+| Let Let! and Hooks           | 5    |
 | Optimizing for Readability   | 10    |
 | Mystery Guest                | 20   |
 | Bad Names                    | 25   |
@@ -174,6 +175,21 @@ end
 Tests should have three phases: arrange, act, assert.
 
 ### Arrange
+
+#### Let, Let!, Before
+
+```ruby
+# Lazy-evaluated
+let(:gilded_rose) { GildedRose.new(name: 'Normal Item', days_remaining: 5, quality: 10) }
+
+# Invoked before each example 
+let(:gilded_rose) { GildedRose.new(name: 'Normal Item', days_remaining: 5, quality: 10) }
+
+# Invoked before each example
+before { gilded_rose.tick }
+```
+
+#### Setup
 
 Setup the objects necessary for the test.
 
