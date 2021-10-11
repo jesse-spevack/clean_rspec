@@ -210,7 +210,7 @@ describe '#tick' do
   end
 end
 
-# Also Good
+# Best 
 describe '#tick' do
   subject(:gilded_rose) { described_class.new(name: name, days_remaining: days_remaining, quality: quality) }
 
@@ -230,6 +230,47 @@ end
 
 Invoke the action that is being tested.
 
+```ruby
+describe '#tick' do
+  # ...
+
+  context 'when given a normal item' do
+    # ...
+
+    it 'updates days remaining and quality' do
+      gilded_rose.tick
+    end
+  end
+end
+```
+
 ### Assert
 
 Check the result of the action.
+
+```ruby
+# Bad
+it 'normal item on sell date' do
+  expect(gilded_rose).to be_instance_of(GildedRose)
+
+  gilded_rose.tick
+
+  expect(gilded_rose.days_remaining).to eq(-1)
+  expect(gilded_rose.quality).to eq(8)
+end
+
+# Good
+it 'normal item on sell date' do
+  gilded_rose.tick
+
+  expect(gilded_rose.days_remaining).to eq(-1)
+  expect(gilded_rose.quality).to eq(8)
+end
+
+# Even Better
+it 'normal item on sell date' do
+  gilded_rose.tick
+
+  expect(gilded_rose).to have_attributes(days_remaining: -1, quality: 8)
+end
+```
