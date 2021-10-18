@@ -32,11 +32,12 @@ We are using a [Ruby translation](https://github.com/clayhill/Gilded-Rose-Refact
 The name for this workshop is a reference to [Clean Code: A Handbook of Agile Software Craftsmanship](https://www.goodreads.com/book/show/3735293-clean-code) by [Robert C. Martin](https://twitter.com/unclebobmartin), which describes the techniques and practices of writing code that is easy to read and change.
 
 The goal of this workshop is to take some of the principles from *Clean Code* and apply them to writing tests with RSpec.
+
 ## Learning Outcomes
 Participants will hone their understanding of writing clean tests by refactoring an example RSpec file. Through this exercise participants will be able to:
 
 - Describe the purpose and benefits of testing
-- Understand the concept of *system under test*
+- Understand the concept of *object under test*
 - Write tests that document code functionality
 - Implement the *three-phase test pattern*
 - Optimize for readability
@@ -48,7 +49,8 @@ Participants will hone their understanding of writing clean tests by refactoring
 | Introduction                 | 0    |
 | Why Testing                  | 5    |
 | Setup                        | 10   |
-| System Under Test            | 15   |
+| Unit vs Integration Tests    | 5    |
+| Object Under Test            | 15   |
 | 🍅 Break                      | 5    |
 | Describe, Context, It        | 25   |
 | Phases of Test               | 0    |
@@ -61,7 +63,28 @@ Participants will hone their understanding of writing clean tests by refactoring
 | Test Doubles                 | 5    |
 |                              |      |
 
-## System Under Test
+## Why Testing
+
+
+
+## Unit vs. Integration Test
+
+Integration tests touch one end of a system and measure an output to assert that all the layers between the input and output are working. Filling out a form, clicking submit, and asserting that a widget is created in the database is an integration test.
+
+Unit tests test one object or one method. Objects are black boxes with limited information. Unit tests should test return values, side effects, critical interactions, but not implementation details. 
+
+Query - returns something, but changes nothing.
+Command - returns nothing, but changes something.
+
+|          | Query             | Command           |
+|----------|-------------------|-------------------|
+| Incoming | Test return value | Test side effect  |
+| Private  | Do not test       | Do not test       |
+| Outgoing | Do not test       | Test message sent |
+
+## Object Under Test
+
+Object under test is the black box we are testing.
 
 The subject keyword can be used to identify the system under test.
 
