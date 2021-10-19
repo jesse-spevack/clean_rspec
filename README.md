@@ -239,6 +239,19 @@ RSpec.describe Workshop do
 end
 ```
 
+### You Do
+Open `gilded_rose_spec.rb`. Improve the test on [line 11](https://github.com/jesse-spevack/clean_rspec/blob/99837658e9a29f4b257165fea28f3a3d27c69cea/spec/gilded_rose_spec.rb#L11).
+
+Commit your change.
+
+```bash
+git commit -m "describe, context, it"
+git push
+```
+
+If you have time, compare your work with other participants' pull requests.
+
+
 ## Phases of test
 
 Tests should have three phases: arrange, act, assert.
