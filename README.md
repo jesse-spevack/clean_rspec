@@ -62,22 +62,20 @@ Participants will hone their understanding of writing clean tests by refactoring
 
 | Topic                        | Time |
 |------------------------------|------|
-| Introduction                 | 0    |
+| Introduction                 | 5    |
+| Learning Goals               | 5    |
 | Why Testing                  | 5    |
-| Setup                        | 10   |
+| 🍅 Break 🍅                   | 5    |
 | Unit vs Integration Tests    | 5    |
-| Object Under Test            | 15   |
-| 🍅 Break                      | 5    |
-| Describe, Context, It        | 25   |
-| Phases of Test               | 0    |
-| Let Let! and Hooks           | 5    |
-| Optimizing for Readability   | 10    |
-| Mystery Guest                | 20   |
-| Bad Names                    | 25   |
-| 🍅 Break                       |      |
-| Shared Examples and Contexts | 0    |
-| Test Doubles                 | 5    |
-|                              |      |
+| Query vs Command             | 5    |
+| Object Under Test            | 10   |
+| Describe, Context, It        | 10   |
+| 🍅 Break 🍅                   | 5    |
+| 3 Phases: Arrange            | 10   |
+| 3 Phases: Act & Assert       | 10   |
+| Shared Examples              | 10   |
+| 🍅 Break 🍅                   | 5    |
+| Test Doubles                 | 10   |
 
 ## Unit vs. Integration Test
 
@@ -441,3 +439,5 @@ Commit your change.
 git commit -m "shared examples, hard pass"
 git push
 ```
+
+If it is hard to test, it is hard to use.
