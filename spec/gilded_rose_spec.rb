@@ -8,6 +8,15 @@ RSpec.describe GildedRose do
     expect(subject).to be_a(GildedRose)
   end
 
+  it "normal item after sell date" do
+    gr = GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10)
+
+    gr.tick
+
+    expect(gr.days_remaining).to eq(-11)
+    expect(gr.quality).to eq(8)
+  end
+
   shared_examples :gilded_rose do |name, days_remaining, quality, expected_days_remaining, expected_quality|
     it 'ticks' do
       gr = GildedRose.new(name: name, days_remaining: days_remaining, quality: quality)
@@ -34,15 +43,6 @@ RSpec.describe GildedRose do
     gr.tick
 
     expect(gr.days_remaining).to eq(-1)
-    expect(gr.quality).to eq(8)
-  end
-
-  it "normal item after sell date" do
-    gr = GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10)
-
-    gr.tick
-
-    expect(gr.days_remaining).to eq(-11)
     expect(gr.quality).to eq(8)
   end
 

@@ -13,9 +13,24 @@ Clone this repository, change directories to the project's root, and bundle inst
 > bundle install
 ```
 
+We'll be sharing our work, so create your own git branch.
+
+```bash
+> git checkout -b $firstName
+```
+
+Next, create a [pull request](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) to share your branch. I recommend the [github cli](https://cli.github.com/), which can be installed with `brew install gh`.
+
+```bash
+gh pr create --title "<First Name> Clean RSpeck"
+```
+
+Complete the **[Welcome Survey](https://forms.gle/ea3ixfw4tnQp8dAZ9)**.
+
+
 # Running Tests
 
-Run tests with the `rspec` command. See [documentation](https://relishapp.com/rspec)
+Run tests with the `rspec` command. See [documentation](https://relishapp.com/rspec).
 
 ```bash
 > rspec
@@ -44,6 +59,7 @@ Participants will hone their understanding of writing clean tests by refactoring
 - Use test doubles judiciously
 
 ## Agenda
+
 | Topic                        | Time |
 |------------------------------|------|
 | Introduction                 | 0    |
@@ -63,10 +79,6 @@ Participants will hone their understanding of writing clean tests by refactoring
 | Test Doubles                 | 5    |
 |                              |      |
 
-## Why Testing
-
-
-
 ## Unit vs. Integration Test
 
 Integration tests touch one end of a system and measure an output to assert that all the layers between the input and output are working. Filling out a form, clicking submit, and asserting that a widget is created in the database is an integration test.
@@ -74,7 +86,20 @@ Integration tests touch one end of a system and measure an output to assert that
 Unit tests test one object or one method. Objects are black boxes with limited information. Unit tests should test return values, side effects, critical interactions, but not implementation details. 
 
 Query - returns something, but changes nothing.
+
+```ruby
+def workshop_count
+  @students.count
+end
+```
+
 Command - returns nothing, but changes something.
+
+```ruby
+def enroll(student)
+  @students << student
+end
+```
 
 |          | Query             | Command           |
 |----------|-------------------|-------------------|
@@ -86,52 +111,73 @@ Command - returns nothing, but changes something.
 
 Object under test is the black box we are testing.
 
-The subject keyword can be used to identify the system under test.
+The subject keyword can be used to identify the system under test. [Stackoverflow](https://stackoverflow.com/questions/38437162/whats-the-difference-between-rspecs-subject-and-let-when-should-they-be-used) on `subject`.
 
 ```ruby
-class GildedRose
+class Workshop
   # ...
 end
 
 # Bad
-describe GildedRose do
+describe Workshop do
   it 'is instantiated by RSpec' do
-    expect(subject).to be_a GildedRose
+    expect(subject).to be_a Workshop
   end
 end
 
 # Less Bad
-describe GildedRose do
-  subject { GildedRose.new }
+describe Workshop do
+  subject { Workshop.new }
 
   it 'is instantiated by RSpec' do
-    expect(subject).to be_a GildedRose
+    expect(subject).to be_a Workshop
   end
 end
 
 # Good
-describe GildedRose do
-  subject(:gilded_rose) { GildedRose.new }
+describe Workshop do
+  subject(:workshop) { Workshop.new }
 
   it 'is instantiated by RSpec' do
-    expect(gilded_rose).to be_a GildedRose
+    expect(workshop).to be_a Workshop
   end
 end
 ```
 
+### You Do
+Open `gilded_rose_spec.rb`. Improve the first test on [line 7](https://github.com/jesse-spevack/clean_rspec/blob/976459bd767d198ae053e0f9e057a4274a440c33/spec/gilded_rose_spec.rb#L7).
+
+Commit your change.
+
+```bash
+git commit -m "object under test with subject keyword"
+git push
+```
+
+If you have time, compare your work with other participants' pull requests.
+
 ## Describe, Context, It
 
-The `describe` method creates an example group.
+Optimize for readability with RSpec documentation methods, `describe`, `context`, & `it`.
+
+The `describe` method creates an example group. I recommend one describe block for each public method that the object under test implements.
 
 ```ruby
 # Bad
-RSpec.describe GildedRose do
+RSpec.describe Workshop do
   # ...
 end
 
-# Good
-RSpec.describe GildedRose do
-  describe '#tick' do
+# Good - use a `#` for instance methods
+RSpec.describe Workshop do
+  describe '#enroll' do
+    # ...
+  end
+end
+
+# Good - use a `.` for instance methods
+RSpec.describe Workshop do
+  describe '.create' do
     # ...
   end
 end
@@ -141,18 +187,18 @@ Example groups can have examples.
 
 ```ruby
 # Bad
-RSpec.describe GildedRose do
-  describe '#tick' do
-    it 'ticks' do
+RSpec.describe Workshop do
+  describe '#enroll' do
+    it 'enrolls' do
       # ...
     end
   end
 end
 
 # Good
-RSpec.describe GildedRose do
-  describe '#tick' do
-    it 'updates days remaining and quality' do
+RSpec.describe Workshop do
+  describe '#enrolls' do
+    it 'adds participant to workshop' do
       # ...
     end
   end
@@ -163,29 +209,29 @@ Example groups can have contexts with specific examples.
 
 ```ruby
 # Bad
-RSpec.describe GildedRose do
-  describe '#tick' do
-    it 'updates days remaining and quality for normal item' do
+RSpec.describe Workshop do
+  describe '#enroll' do
+    it 'adds participant to workshop when there is room' do
       # ...
     end
 
-    it 'updates days remaining and quality for sulfuras item' do
+    it 'does not add participant to workshop when there is not room' do
       # ...
     end
   end
 end
 
 # Good
-RSpec.describe GildedRose do
-  describe '#tick' do
-    context 'when given a normal item' do
-      it 'updates days remaining and quality' do
+RSpec.describe Workshop do
+  describe '#enroll' do
+    context 'when there is room' do
+      it 'adds participant to workshop' do
         # ...
       end
     end
 
-    context 'when given a sulfuras item' do
-      it 'updates days remaining and quality' do
+    context 'when there is NOT room' do
+      it 'does not add participant to workshop' do
         # ...
       end
     end
