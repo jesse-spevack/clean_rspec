@@ -89,15 +89,15 @@ Query - returns something, but changes nothing.
 
 ```ruby
 def workshop_count
-  @students.count
+  @participants.count
 end
 ```
 
 Command - returns nothing, but changes something.
 
 ```ruby
-def enroll(student)
-  @students << student
+def enroll(participant)
+  @participants << participant
 end
 ```
 
@@ -265,7 +265,7 @@ Tests should have three phases: arrange, act, assert.
 let(:gilded_rose) { GildedRose.new(name: 'Normal Item', days_remaining: 5, quality: 10) }
 
 # Invoked before each example 
-let(:gilded_rose) { GildedRose.new(name: 'Normal Item', days_remaining: 5, quality: 10) }
+let!(:gilded_rose) { GildedRose.new(name: 'Normal Item', days_remaining: 5, quality: 10) }
 
 # Invoked before each example
 before { gilded_rose.tick }
@@ -277,32 +277,32 @@ Setup the objects necessary for the test.
 
 ```ruby
 # Bad
-describe '#tick' do
-  context 'when given a normal item' do
-    it 'updates days remaining and quality' do
-      gr = GildedRose.new(name: 'Normal Item', days_remaining: 5, quality: 10)
-      gr2 = GildedRose.new(name: 'Sulfuras, Hand of Ragnaros', days_remaining: 5, quality: 10)
+describe '#enroll' do
+  context 'when there is room' do
+    it 'adds participant to workshop' do
+      pr = Participant.new(name: 'Jesse') 
+      pr2 = Participant.new(name: 'Sandi') 
       # ...
     end
   end
 end
 
 # Less Bad
-describe '#tick' do
-  context 'when given a normal item' do
-    it 'updates days remaining and quality' do
-      gilded_rose = GildedRose.new(name: 'Normal Item', days_remaining: 5, quality: 10)
+describe '#enroll' do
+  context 'when there is room' do
+    it 'adds participant to workshop' do
+      pr = Participant.new(name: 'Jesse') 
       # ...
     end
   end
 end
 
 # Good
-describe '#tick' do
-  context 'when given a normal item' do
-    let(:gilded_rose) { GildedRose.new(...) }
+describe '#enroll' do
+  context 'when there is room' do
+    let(:workshop) { Workshop.new(capacity: 1) }
 
-    it 'updates days remaining and quality' do
+    it 'adds participant to workshop' do
       # ...
     end
   end
@@ -323,6 +323,18 @@ describe '#tick' do
   end
 end
 ```
+
+### You Do
+Open `gilded_rose_spec.rb`. Improve the test on [line 11](https://github.com/jesse-spevack/clean_rspec/blob/99837658e9a29f4b257165fea28f3a3d27c69cea/spec/gilded_rose_spec.rb#L11).
+
+Commit your change.
+
+```bash
+git commit -m "arrange"
+git push
+```
+
+If you have time, compare your work with other participants' pull requests.
 
 ### Act
 
@@ -348,27 +360,31 @@ Check the result of the action.
 
 ```ruby
 # Bad
-it 'normal item on sell date' do
-  expect(gilded_rose).to be_instance_of(GildedRose)
+subject(:workshop) { Workshop.new(seats: 15) }
 
-  gilded_rose.tick
+let(:participant) { Participant.new('Jesse') }
 
-  expect(gilded_rose.days_remaining).to eq(-1)
-  expect(gilded_rose.quality).to eq(8)
+it 'enrolls when there is room for participant' do
+  expect(workshop).to be_instance_of(Workshop)
+
+  workshop.enroll(participant)
+
+  expect(workshop.participants.empty?).to eq false 
+  expect(workshop.participants.count).to eq 1 
 end
 
 # Good
-it 'normal item on sell date' do
-  gilded_rose.tick
+it 'adds participant' do
+  workshop.enroll(participant)
 
-  expect(gilded_rose.days_remaining).to eq(-1)
-  expect(gilded_rose.quality).to eq(8)
+  expect(workshop.participants.empty?).to eq false 
+  expect(workshop.participants.count).to eq 1 
 end
 
 # Even Better
-it 'normal item on sell date' do
-  gilded_rose.tick
+it 'adds participant' do
+  workshop.enroll(participant)
 
-  expect(gilded_rose).to have_attributes(days_remaining: -1, quality: 8)
+  expect(workshop.participants.count).to eq 1 
 end
 ```
