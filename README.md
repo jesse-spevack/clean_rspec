@@ -309,15 +309,13 @@ describe '#enroll' do
 end
 
 # Best 
-describe '#tick' do
-  subject(:gilded_rose) { described_class.new(name: name, days_remaining: days_remaining, quality: quality) }
+describe '#enroll' do
+  subject(:workshop) { Workshop.new(capacity: capacity) }
 
   context 'when given a normal item' do
-    let(:name) { 'Normal Item' }
-    let(:days_remaining) { 0 }
-    let(:quality) { 10 }
+    let(:capacity) { 1 }
 
-    it 'updates days remaining and quality' do
+    it 'adds participant to workshop' do
       # ...
     end
   end
@@ -325,7 +323,7 @@ end
 ```
 
 ### You Do
-Open `gilded_rose_spec.rb`. Improve the test on [line 11](https://github.com/jesse-spevack/clean_rspec/blob/99837658e9a29f4b257165fea28f3a3d27c69cea/spec/gilded_rose_spec.rb#L11).
+Open `gilded_rose_spec.rb`. Add the arrange step the test on [line 11](https://github.com/jesse-spevack/clean_rspec/blob/99837658e9a29f4b257165fea28f3a3d27c69cea/spec/gilded_rose_spec.rb#L11).
 
 Commit your change.
 
@@ -341,14 +339,14 @@ If you have time, compare your work with other participants' pull requests.
 Invoke the action that is being tested.
 
 ```ruby
-describe '#tick' do
+describe '#enroll' do
   # ...
 
-  context 'when given a normal item' do
+  context 'when workshop has available seats' do
     # ...
 
-    it 'updates days remaining and quality' do
-      gilded_rose.tick
+    it 'adds participant' do
+      workshop.enroll(participant)
     end
   end
 end
@@ -387,4 +385,59 @@ it 'adds participant' do
 
   expect(workshop.participants.count).to eq 1 
 end
+```
+
+### You Do
+Open `gilded_rose_spec.rb`. Add the act and assert steps to the test on [line 11](https://github.com/jesse-spevack/clean_rspec/blob/99837658e9a29f4b257165fea28f3a3d27c69cea/spec/gilded_rose_spec.rb#L11).
+
+Commit your change.
+
+```bash
+git commit -m "act and assert"
+git push
+```
+
+If you have time, compare your work with other participants' pull requests.
+
+## Shared Examples
+
+Shared examples are optimized for the test writer. We spend far more time reading code than writing it, therefore tools that help us write code at the expense of making the code we write harder to read should be used with caution.
+
+```ruby
+# Bad
+shared_examples :workshop do |seats, participant| 
+  it 'enrolls' do
+    workshop = Workshop.new(seats: seats)
+    workshop.enroll(participant)
+    expect(workshop.headcount).to eq 1
+  end
+end
+
+it_behaves_like :workshop, 10, Participant.new('Jesse')
+
+
+# Good
+describe '#enroll' do
+  subject(:workshop) { Workshop.new(capacity: capacity) }
+
+  let(:participant) { Participant.new('Jesse') }
+
+  context 'when workshop has available seats' do
+    let(:capacity) { 1 }
+
+    it 'adds participant' do
+      workshop.enroll(participant)
+    end
+  end
+end
+```
+
+### You Do
+Open `gilded_rose_spec.rb`. Remove the shared example on [line 20](https://github.com/jesse-spevack/clean_rspec/blob/e56a9fd51db869e4d40b7d67b9ee73294d115e08/spec/gilded_rose_spec.rb#L20). Rewrite the tests starting on [line 58](https://github.com/jesse-spevack/clean_rspec/blob/e56a9fd51db869e4d40b7d67b9ee73294d115e08/spec/gilded_rose_spec.rb#L58), but optimize for readability.
+
+Commit your change.
+
+```bash
+git commit -m "shared examples, hard pass"
+git push
 ```
