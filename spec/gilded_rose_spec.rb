@@ -1,15 +1,12 @@
 require "spec_helper"
 require "./lib/gilded_rose"
+require 'pry'
 
 RSpec.describe GildedRose do
   let(:name) { 'Normal Item' }
 
-  it "is a gilded rose" do
-    expect(subject).to be_a(GildedRose)
-  end
-
   it "normal item after sell date" do
-    gr = GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10)
+    gr = GildedRose.for(name: "Normal Item", days_remaining: -10, quality: 10)
 
     gr.tick
 
@@ -19,16 +16,16 @@ RSpec.describe GildedRose do
 
   shared_examples :gilded_rose do |name, days_remaining, quality, expected_days_remaining, expected_quality|
     it 'ticks' do
-      gr = GildedRose.new(name: name, days_remaining: days_remaining, quality: quality)
+      gr = GildedRose.for(name: name, days_remaining: days_remaining, quality: quality)
       gr.tick
       expect(gr).to have_attributes(days_remaining: expected_days_remaining, quality: expected_quality)
     end
   end
 
   it "normal item before sell date" do
-    gr = GildedRose.new(name: "Normal Item", days_remaining: 5, quality: 10)
-    gr2 = GildedRose.new(name: "Normal Item", days_remaining: -1, quality: 8)
-    gr3 = GildedRose.new(name: "Normal Item", days_remaining: 1, quality: 12)
+    gr = GildedRose.for(name: "Normal Item", days_remaining: 5, quality: 10)
+    gr2 = GildedRose.for(name: "Normal Item", days_remaining: -1, quality: 8)
+    gr3 = GildedRose.for(name: "Normal Item", days_remaining: 1, quality: 12)
 
     gr.tick
 
@@ -36,9 +33,7 @@ RSpec.describe GildedRose do
   end
 
   it "normal item on sell date" do
-    gr = GildedRose.new(name: "Normal Item", days_remaining: 0, quality: 10)
-
-    expect(gr).to be_instance_of(GildedRose) 
+    gr = GildedRose.for(name: "Normal Item", days_remaining: 0, quality: 10)
 
     gr.tick
 
@@ -47,7 +42,7 @@ RSpec.describe GildedRose do
   end
 
   it "normal item of zero quality" do
-    gr = GildedRose.new(name: name, days_remaining: 5, quality: 0)
+    gr = GildedRose.for(name: "Normal Item", days_remaining: 5, quality: 0)
 
     gr.tick
 
@@ -64,7 +59,7 @@ RSpec.describe GildedRose do
   it_behaves_like :gilded_rose, "Aged Brie", -10, 50, -11, 50
 
   it "sulfuras before sell date" do
-    gr = GildedRose.new(name: "Sulfuras, Hand of Ragnaros", days_remaining: 5, quality: 80)
+    gr = GildedRose.for(name: "Sulfuras, Hand of Ragnaros", days_remaining: 5, quality: 80)
 
     gr.tick
 
@@ -73,7 +68,7 @@ RSpec.describe GildedRose do
   end
 
   it "sulfuras on sell date" do
-    gr = GildedRose.new(name: "Sulfuras, Hand of Ragnaros", days_remaining: 0, quality: 80)
+    gr = GildedRose.for(name: "Sulfuras, Hand of Ragnaros", days_remaining: 0, quality: 80)
 
     gr.tick
 
@@ -82,7 +77,7 @@ RSpec.describe GildedRose do
   end
 
   it "sulfuras after sell date" do
-    gr = GildedRose.new(name: "Sulfuras, Hand of Ragnaros", days_remaining: -10, quality: 80)
+    gr = GildedRose.for(name: "Sulfuras, Hand of Ragnaros", days_remaining: -10, quality: 80)
 
     gr.tick
 
@@ -91,7 +86,7 @@ RSpec.describe GildedRose do
   end
 
   it "backstage passes long before sell date" do
-    gr = GildedRose.new(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 11, quality: 10)
+    gr = GildedRose.for(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 11, quality: 10)
 
     gr.tick
 
@@ -100,7 +95,7 @@ RSpec.describe GildedRose do
   end
 
   it "backstage passes long before sell date at max quality" do
-    gr = GildedRose.new(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 11, quality: 50)
+    gr = GildedRose.for(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 11, quality: 50)
 
     gr.tick
 
@@ -108,7 +103,7 @@ RSpec.describe GildedRose do
   end
 
   it "backstage passes medium close to sell date upper bound" do
-    gr = GildedRose.new(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 10, quality: 10)
+    gr = GildedRose.for(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 10, quality: 10)
 
     gr.tick
 
@@ -117,7 +112,7 @@ RSpec.describe GildedRose do
   end
 
   it "backstage passes medium close to sell date upper bound at max quality" do
-    gr = GildedRose.new(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 10, quality: 50)
+    gr = GildedRose.for(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 10, quality: 50)
 
     gr.tick
 
@@ -126,7 +121,7 @@ RSpec.describe GildedRose do
   end
 
   it "backstage passes medium close to sell date lower bound" do
-    gr = GildedRose.new(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 6, quality: 10)
+    gr = GildedRose.for(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 6, quality: 10)
 
     gr.tick
 
@@ -135,7 +130,7 @@ RSpec.describe GildedRose do
   end
 
   it "backstage passes medium close to sell date lower bound at max quality" do
-    gr = GildedRose.new(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 6, quality: 50)
+    gr = GildedRose.for(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 6, quality: 50)
 
     gr.tick
 
@@ -144,7 +139,7 @@ RSpec.describe GildedRose do
   end
 
   it "backstage passes very close to sell date upper bound" do
-    gr = GildedRose.new(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 5, quality: 10)
+    gr = GildedRose.for(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 5, quality: 10)
 
     gr.tick
 
@@ -153,7 +148,7 @@ RSpec.describe GildedRose do
   end
 
   it "backstage passes very close to sell date upper bound at max quality" do
-    gr = GildedRose.new(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 5, quality: 50)
+    gr = GildedRose.for(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 5, quality: 50)
 
     gr.tick
 
@@ -162,7 +157,7 @@ RSpec.describe GildedRose do
   end
 
   it "backstage passes very close to sell date lower bound" do
-    gr = GildedRose.new(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 1, quality: 10)
+    gr = GildedRose.for(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 1, quality: 10)
 
     gr.tick
 
@@ -171,7 +166,7 @@ RSpec.describe GildedRose do
   end
 
   it "backstage passes very close to sell date lower bound at max quality" do
-    gr = GildedRose.new(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 1, quality: 50)
+    gr = GildedRose.for(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 1, quality: 50)
 
     gr.tick
 
@@ -180,7 +175,7 @@ RSpec.describe GildedRose do
   end
 
   it "backstage passes on sell date" do
-    gr = GildedRose.new(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 0, quality: 10)
+    gr = GildedRose.for(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: 0, quality: 10)
 
     gr.tick
 
@@ -189,7 +184,7 @@ RSpec.describe GildedRose do
   end
 
   it "backstage passes after sell date" do
-    gr = GildedRose.new(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: -10, quality: 10)
+    gr = GildedRose.for(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: -10, quality: 10)
 # 
     gr.tick
 
@@ -198,7 +193,7 @@ RSpec.describe GildedRose do
   end
 
   xit "conjured mana before sell date" do
-    gr = GildedRose.new(name: "Conjured Mana Cake", days_remaining: 5, quality: 10)
+    gr = GildedRose.for(name: "Conjured Mana Cake", days_remaining: 5, quality: 10)
 
     gr.tick
 
@@ -207,7 +202,7 @@ RSpec.describe GildedRose do
   end
 
   xit "conjured mana before sell date at zero quality" do
-    gr = GildedRose.new(name: "Conjured Mana Cake", days_remaining: 5, quality: 0)
+    gr = GildedRose.for(name: "Conjured Mana Cake", days_remaining: 5, quality: 0)
 
     gr.tick
 
@@ -216,7 +211,7 @@ RSpec.describe GildedRose do
   end
 
   xit "conjured mana on sell date" do
-    gr = GildedRose.new(name: "Conjured Mana Cake", days_remaining: 0, quality: 10)
+    gr = GildedRose.for(name: "Conjured Mana Cake", days_remaining: 0, quality: 10)
 
     gr.tick
 
@@ -225,7 +220,7 @@ RSpec.describe GildedRose do
   end
 
   xit "conjured mana on sell date at zero quality" do
-    gr = GildedRose.new(name: "Conjured Mana Cake", days_remaining: 0, quality: 0)
+    gr = GildedRose.for(name: "Conjured Mana Cake", days_remaining: 0, quality: 0)
 
     gr.tick
 
@@ -234,7 +229,7 @@ RSpec.describe GildedRose do
   end
 
   xit "conjured mana after sell date" do
-    gr = GildedRose.new(name: "Conjured Mana Cake", days_remaining: -10, quality: 10)
+    gr = GildedRose.for(name: "Conjured Mana Cake", days_remaining: -10, quality: 10)
 
     gr.tick
 
@@ -243,7 +238,7 @@ RSpec.describe GildedRose do
   end
 
   xit "conjured mana after sell date at zero quality" do
-    gr = GildedRose.new(name: "Conjured Mana Cake", days_remaining: -10, quality: 0)
+    gr = GildedRose.for(name: "Conjured Mana Cake", days_remaining: -10, quality: 0)
 
     gr.tick
 
