@@ -1,6 +1,5 @@
 require "spec_helper"
 require "./lib/gilded_rose"
-require 'pry'
 
 RSpec.describe GildedRose do
   let(:name) { 'Normal Item' }
