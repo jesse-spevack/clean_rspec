@@ -22,7 +22,7 @@ We'll be sharing our work, so create your own git branch.
 Next, create a [pull request](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) to share your branch. I recommend the [github cli](https://cli.github.com/), which can be installed with `brew install gh`.
 
 ```bash
-gh pr create --title "<First Name> Clean RSpeck"
+gh pr create --title "<First Name> Clean RSpec"
 ```
 
 Complete the **[Welcome Survey](https://forms.gle/ea3ixfw4tnQp8dAZ9)**, unless you go to Turing and then complete the **[Turing Welcome Survey](https://forms.gle/GgTvRHkhMFRk6yGs5)**.
