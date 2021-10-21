@@ -25,8 +25,7 @@ Next, create a [pull request](https://docs.github.com/en/github/collaborating-wi
 gh pr create --title "<First Name> Clean RSpeck"
 ```
 
-Complete the **[Welcome Survey](https://forms.gle/ea3ixfw4tnQp8dAZ9)**.
-
+Complete the **[Welcome Survey](https://forms.gle/ea3ixfw4tnQp8dAZ9)**, unless you go to Turing and then complete the **[Turing Welcome Survey](https://forms.gle/GgTvRHkhMFRk6yGs5)**.
 
 # Running Tests
 
