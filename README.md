@@ -455,3 +455,29 @@ Test Doubles should never be used to:
 1. Mock / Stub the Object under test.
 
 ![](https://media.giphy.com/media/KhliiAkDFP9YY/giphy.gif)
+
+```ruby
+# Bad
+it 'notifies' do
+  expect(workshop).to receive(:notify)
+
+  workshop.enroll(participant)
+end
+
+# Better 
+it 'calls messenger to notify' do
+  expect_any_instance_of(Messenger).to receive(:notify)
+
+  workshop.enroll(participant)
+end
+
+# Best 
+it 'calls messenger to notify' do
+  messenger = double
+
+  expect(Messenger).to receive(:new).with(participant).and_return(messenger)
+  expect(messenger).to receive(:notify)
+
+  workshop.enroll(participant)
+end
+```
