@@ -172,7 +172,7 @@ RSpec.describe Workshop do
   end
 end
 
-# Good - use a `.` for instance methods
+# Good - use a `.` for class methods (thanks Silas!)
 RSpec.describe Workshop do
   describe '.create' do
     # ...
