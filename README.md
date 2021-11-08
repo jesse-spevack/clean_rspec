@@ -454,4 +454,4 @@ Test Doubles should never be used to:
 
 1. Mock / Stub the Object under test.
 
-![](https://giphy.com/clips/theoffice-lkibHaGO1xmJXapEdq)
+![](https://media.giphy.com/media/KhliiAkDFP9YY/giphy.gif)
