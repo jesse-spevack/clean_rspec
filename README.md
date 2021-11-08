@@ -27,6 +27,8 @@ gh pr create --title "<First Name> Clean RSpec"
 
 Complete the **[Welcome Survey](https://forms.gle/ea3ixfw4tnQp8dAZ9)**.
 
+Optionally, create your own [Bingo](https://docs.google.com/spreadsheets/d/1FOqNjERAdpEzL0k4ix-2qrER1IBSjEuYPv7jWjrsvWs/edit?usp=sharing) board to help you follow along!
+
 # Running Tests
 
 Run tests with the `rspec` command. See [documentation](https://relishapp.com/rspec).
