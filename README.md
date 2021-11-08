@@ -5,7 +5,7 @@ Testing has been a feature of the Ruby community for a long time. Why then are o
 
 # Getting Started
 
-Clone this repository, change directories to the project's root, and bundle install.
+[Fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo) this repository, [clone](https://docs.github.com/en/get-started/quickstart/fork-a-repo#cloning-your-forked-repository) your forked repository, change directories to the project's root, and bundle install.
 
 ```bash
 > git clone https://github.com/jesse-spevack/clean_rspec.git
@@ -25,7 +25,7 @@ Next, create a [pull request](https://docs.github.com/en/github/collaborating-wi
 gh pr create --title "<First Name> Clean RSpec"
 ```
 
-Complete the **[Welcome Survey](https://forms.gle/ea3ixfw4tnQp8dAZ9)**, unless you go to Turing and then complete the **[Turing Welcome Survey](https://forms.gle/GgTvRHkhMFRk6yGs5)**.
+Complete the **[Welcome Survey](https://forms.gle/ea3ixfw4tnQp8dAZ9)**.
 
 # Running Tests
 
@@ -33,6 +33,9 @@ Run tests with the `rspec` command. See [documentation](https://relishapp.com/rs
 
 ```bash
 > rspec
+
+Finished in 0.01692 seconds (files took 0.1944 seconds to load)
+33 examples, 0 failures, 6 pending
 ```
 
 # References
@@ -64,16 +67,13 @@ Participants will hone their understanding of writing clean tests by refactoring
 | Introduction                 | 5    |
 | Learning Goals               | 5    |
 | Why Testing                  | 5    |
-| 🍅 Break 🍅                   | 5    |
 | Unit vs Integration Tests    | 5    |
 | Query vs Command             | 5    |
 | Object Under Test            | 10   |
 | Describe, Context, It        | 10   |
-| 🍅 Break 🍅                   | 5    |
 | 3 Phases: Arrange            | 10   |
 | 3 Phases: Act & Assert       | 10   |
 | Shared Examples              | 10   |
-| 🍅 Break 🍅                   | 5    |
 | Test Doubles                 | 10   |
 
 ## Unit vs. Integration Test
@@ -441,4 +441,15 @@ git push
 
 ## Test Doubles 
 
-If it is hard to test, it is hard to use.
+[Justin Searls](https://twitter.com/searls) gave a talk called [Breaking up (with) your test suite](https://youtu.be/9_3RsSvgRd4). Please watch this talk.
+
+Test Doubles should be used for two reasons:
+
+1. Testing a critical message is sent (e.g. we call `notify`, or request from an external api)
+2. Discovery Testing / Top Down Testing (see Breaking up with your test suite)
+
+Test Doubles should never be used to:
+
+1. Mock / Stub the Object under test.
+
+![](https://giphy.com/clips/theoffice-lkibHaGO1xmJXapEdq)
