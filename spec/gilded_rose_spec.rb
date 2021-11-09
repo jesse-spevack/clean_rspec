@@ -9,13 +9,42 @@ RSpec.describe GildedRose do
     expect(gilded_rose).to be_a(GildedRose)
   end
 
-  context 'when the days remaining is less than 11' do
-    let!(:gilded_rose) { GildedRose.new(name: 'Normal Item', days_remaining: -10, quality: 10) }
-    it "lowers the quality score" do
-      gilded_rose.tick
+  describe '#tick' do
+    context 'with a normal item' do
+      subject { described_class.new(name: 'Normal Item', days_remaining: days_remaining, quality: quality) }
+      context 'when the days remaining is less than 11' do
+        let(:days_remaining) { -10 }
+        let(:quality) { 10 }
 
-      expect(gilded_rose.days_remaining).to eq(-11)
-      expect(gilded_rose.quality).to eq(8)
+        before do
+          subject.tick
+        end
+
+        it "lowers the quality score" do
+          expect(subject.quality).to eq(8)
+        end
+
+        it 'increases the days remaining by one' do
+          expect(subject.days_remaining).to eq(-11)
+        end
+      end
+
+      context 'when the days remaining is 0' do
+        let(:days_remaining) { 0 }
+        let(:quality) { 10 }
+
+        before do
+          subject.tick
+        end
+
+        it "lowers the quality score by two" do
+          expect(subject.quality).to eq(8)
+        end
+
+        it 'increases sets the days remaining to a negative' do
+          expect(subject.days_remaining).to eq(-1)
+        end
+      end
     end
   end
 
