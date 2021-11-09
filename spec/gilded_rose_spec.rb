@@ -46,6 +46,94 @@ RSpec.describe GildedRose do
         end
       end
     end
+
+    context 'with Aged Brie' do
+      let(:name) { 'Aged Brie' }
+      subject { described_class.new(name: name, days_remaining: days_remaining, quality: quality) }
+
+      before do
+        subject.tick
+      end
+      context 'when the days remaining is 5' do
+        let(:days_remaining) { 5 }
+        context 'when the quality is 10' do
+          let(:quality) { 10 }
+          it 'raises the quality by one' do
+            expect(subject.quality).to eq(11)
+          end
+
+          it 'lowers the days remaining by one' do
+            expect(subject.days_remaining).to eq(4)
+          end
+        end
+        context 'when the quality is 50' do
+          let(:quality) { 50 }
+          it 'keeps the quality at the same value' do
+            expect(subject.quality).to eq(50)
+          end
+
+          it 'lowers the days remaining by one' do
+            expect(subject.days_remaining).to eq(4)
+          end
+        end
+      end
+      context 'when the days remaining is 0' do
+        let(:days_remaining) { 0 }
+        context 'when the quality is 10' do
+          let(:quality) { 10 }
+          it 'raises the quality by two' do
+            expect(subject.quality).to eq(12)
+          end
+
+          it 'lowers the days remaining by one' do
+            expect(subject.days_remaining).to eq(-1)
+          end
+        end
+        context 'when the quality is 49' do
+          let(:quality) { 50 }
+          it 'raises the quality by one' do
+            expect(subject.quality).to eq(50)
+          end
+
+          it 'lowers the days remaining by one' do
+            expect(subject.days_remaining).to eq(-1)
+          end
+        end
+        context 'when the quality is 50' do
+          let(:quality) { 50 }
+          it 'keeps the quality at the same value' do
+            expect(subject.quality).to eq(50)
+          end
+
+          it 'lowers the days remaining by one' do
+            expect(subject.days_remaining).to eq(-1)
+          end
+        end
+      end
+      context 'when the days remaining is negative' do
+        let(:days_remaining) { -10 }
+        context 'when the quality is 10' do
+          let(:quality) { 10 }
+          it 'raises the quality by two' do
+            expect(subject.quality).to eq(12)
+          end
+
+          it 'lowers the days remaining by one' do
+            expect(subject.days_remaining).to eq(-11)
+          end
+        end
+        context 'when the quality is 50' do
+          let(:quality) { 50 }
+          it 'keeps the quality at the same value' do
+            expect(subject.quality).to eq(50)
+          end
+
+          it 'lowers the days remaining by one' do
+            expect(subject.days_remaining).to eq(-11)
+          end
+        end
+      end
+    end
   end
 
   shared_examples :gilded_rose do |name, days_remaining, quality, expected_days_remaining, expected_quality|
