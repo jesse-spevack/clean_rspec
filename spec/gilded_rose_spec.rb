@@ -6,7 +6,7 @@ RSpec.describe GildedRose do
   subject(:gilded_rose) { GildedRose.new }
 
   it "is a gilded rose" do
-    expect(:gilded_rose).to be_a(GildedRose)
+    expect(gilded_rose).to be_a(GildedRose)
   end
 
   describe '#tick' do
