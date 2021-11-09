@@ -10,20 +10,16 @@ RSpec.describe GildedRose do
     expect(gilded_rose).to be_a(GildedRose)
   end
 
-  context "with a normal item after sell date" do
-    subject(:gilded_rose) { GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10) }
+  describe "#tick" do
+    context "with a normal item after sell date" do
+      subject(:gilded_rose) { GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10) }
 
-    before { gilded_rose.tick }
-
-    describe "#days_remaining" do
-      it "is 11 days ago" do
-        expect(gilded_rose.days_remaining).to eq(-11)
+      it "decreases days_remaining by one" do
+        expect { gilded_rose.tick }.to change(gilded_rose, :days_remaining).by(-1)
       end
-    end
 
-    describe "#quality" do
-      it "is 8" do
-        expect(gilded_rose.quality).to eq(8)
+      it "decreases quality by 2" do
+        expect { gilded_rose.tick }.to change(gilded_rose, :quality).by(-2)
       end
     end
   end
