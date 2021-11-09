@@ -3,9 +3,10 @@ require "./lib/gilded_rose"
 
 RSpec.describe GildedRose do
   let(:name) { 'Normal Item' }
+  subject(:gilded_rose) { GildedRose.new }
 
   it "is a gilded rose" do
-    expect(subject).to be_a(GildedRose)
+    expect(gilded_rose).to be_a(GildedRose)
   end
 
   it "normal item after sell date" do
@@ -35,15 +36,18 @@ RSpec.describe GildedRose do
     expect(gr).to have_attributes(days_remaining: 4, quality: 9)
   end
 
-  it "normal item on sell date" do
-    gr = GildedRose.new(name: "Normal Item", days_remaining: 0, quality: 10)
+  context "normal item on sell date" do
+    let(:gr) { GildedRose.new(name: "Normal Item", days_remaining: 0, quality: 10) }
 
-    expect(gr).to be_instance_of(GildedRose) 
+    it "has negative days remaining" do
+      gr.tick
+      expect(gr.quality).to eq(8)
+    end
 
-    gr.tick
-
-    expect(gr.days_remaining).to eq(-1)
-    expect(gr.quality).to eq(8)
+    it "has a degraded quality of 8" do
+      gr.tick
+      expect(gr.days_remaining).to eq(-1)
+    end
   end
 
   it "normal item of zero quality" do
