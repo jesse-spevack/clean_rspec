@@ -14,31 +14,31 @@ RSpec.describe GildedRose do
     context 'when the item is normal' do
       context 'when the quality is greater than 0' do
         context 'when the item is before the sell date' do
-          subject(:fresh_normal_item) { GildedRose.new(name: "Normal Item", days_remaining: 5, quality: 10) }
+          let(:fresh_normal_item) { GildedRose.new(name: "Normal Item", days_remaining: 5, quality: 10) }
+
+          before { fresh_normal_item.tick }
 
           it 'subtracts 1 from the days remaining and the quality' do
-            fresh_normal_item.tick
-
             expect(fresh_normal_item).to have_attributes(days_remaining: 4, quality: 9)
           end
         end
 
         context 'when the item is on the sell date' do
-          subject(:normal_item_on_sell_date) { GildedRose.new(name: "Normal Item", days_remaining: 0, quality: 10) }
+          let(:normal_item_on_sell_date) { GildedRose.new(name: "Normal Item", days_remaining: 0, quality: 10) }
+
+          before { normal_item_on_sell_date.tick }
 
           it 'subtracts 1 from the days remaining and subtracts 2 from the quality' do
-            normal_item_on_sell_date.tick
-
             expect(normal_item_on_sell_date).to have_attributes(days_remaining: -1, quality: 8)
           end
         end
 
         context 'when the item is after the sell date' do
-          subject(:expired_normal_item) { GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10) }
+          let(:expired_normal_item) { GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10) }
+
+          before { expired_normal_item.tick }
 
           it 'subtracts 1 from the days remaining and subtracts 2 from the quality' do
-            expired_normal_item.tick
-
             expect(expired_normal_item).to have_attributes(days_remaining: -11, quality: 8)
           end
 
@@ -47,11 +47,11 @@ RSpec.describe GildedRose do
 
       context 'when the quality is 0' do
         context 'when the item is before the sell date' do
-          subject(:normal_item_with_zero_quality) { GildedRose.new(name: name, days_remaining: 5, quality: 0) }
+          let(:normal_item_with_zero_quality) { GildedRose.new(name: name, days_remaining: 5, quality: 0) }
+
+          before { normal_item_with_zero_quality.tick }
 
           it 'subtracts 1 from the days remaining and the quality is 0' do
-            normal_item_with_zero_quality.tick
-
             expect(normal_item_with_zero_quality).to have_attributes(days_remaining: 4, quality: 0)
           end
         end
