@@ -15,7 +15,7 @@ RSpec.describe GildedRose do
       gilded_rose.tick
     end
 
-    context "when it is after the sell date" do
+    context "when a normal item is after the sell date" do
       let(:props) do 
         {
           name: "Normal Item",
