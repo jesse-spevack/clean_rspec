@@ -3,9 +3,10 @@ require "./lib/gilded_rose"
 
 RSpec.describe GildedRose do
   let(:name) { 'Normal Item' }
+  subject(:guilded_rose) { GildedRose.new }
 
   it "is a gilded rose" do
-    expect(subject).to be_a(GildedRose)
+    expect(guilded_rose).to be_a(GildedRose)
   end
 
   it "normal item after sell date" do
@@ -38,7 +39,7 @@ RSpec.describe GildedRose do
   it "normal item on sell date" do
     gr = GildedRose.new(name: "Normal Item", days_remaining: 0, quality: 10)
 
-    expect(gr).to be_instance_of(GildedRose) 
+    expect(gr).to be_instance_of(GildedRose)
 
     gr.tick
 
@@ -190,7 +191,7 @@ RSpec.describe GildedRose do
 
   it "backstage passes after sell date" do
     gr = GildedRose.new(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: -10, quality: 10)
-# 
+#
     gr.tick
 
     expect(gr.days_remaining).to eq(-11)
