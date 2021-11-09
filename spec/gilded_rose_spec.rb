@@ -14,7 +14,7 @@ RSpec.describe GildedRose do
     subject(:tick) { gilded_rose_instance.tick }
 
     let(:gilded_rose_instance) do
-      described_class.new(name: "Normal Item", days_remaining: -10, quality: 10)
+      described_class.new(name: 'Normal Item', days_remaining: -10, quality: 10)
     end
 
     before { tick }
@@ -27,7 +27,6 @@ RSpec.describe GildedRose do
       expect(gilded_rose_instance.quality).to eq(8)
     end
   end
-
 
   shared_examples :gilded_rose do |name, days_remaining, quality, expected_days_remaining, expected_quality|
     it 'ticks' do
@@ -47,15 +46,22 @@ RSpec.describe GildedRose do
     expect(gr).to have_attributes(days_remaining: 4, quality: 9)
   end
 
-  it "normal item on sell date" do
-    gr = GildedRose.new(name: "Normal Item", days_remaining: 0, quality: 10)
+  context 'normal item on sell date' do
+    let(:gilded_rose_instance) { described_class.new(name: 'Normal Item', days_remaining: 0, quality: 10) }
 
-    expect(gr).to be_instance_of(GildedRose) 
+    before { gilded_rose_instance.tick }
 
-    gr.tick
+    it 'return instane of GildedRose' do
+      expect(gilded_rose_instance).to be_instance_of(GildedRose)
+    end
 
-    expect(gr.days_remaining).to eq(-1)
-    expect(gr.quality).to eq(8)
+    it 'updates days_remaining' do
+      expect(gilded_rose_instance.days_remaining).to eq(-1)
+    end
+
+    it 'updates quality' do
+      expect(gilded_rose_instance.quality).to eq(8)
+    end
   end
 
   it "normal item of zero quality" do
