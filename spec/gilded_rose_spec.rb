@@ -3,7 +3,7 @@ require "./lib/gilded_rose"
 
 RSpec.describe GildedRose do
   let(:name) { 'Normal Item' }
-  let(:gilded_rose) { GildedRose.new }
+  subject(:gilded_rose) { GildedRose.new }
 
   it "is a gilded rose" do
     expect(:gilded_rose).to be_a(GildedRose)
