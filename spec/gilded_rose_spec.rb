@@ -10,9 +10,10 @@ RSpec.describe GildedRose do
   end
 
   describe '#tick' do
+    subject(:gilded_rose) { described_class.new(name: name, days_remaining: days_remaining, quality: 10) }
+
     context 'normal item' do
       let(:name) { "Normal Item "}
-      subject(:gilded_rose) { described_class.new(name: name, days_remaining: days_remaining, quality: 10) }
 
       context 'when item after sell date' do
         let(:days_remaining) { -10 }
