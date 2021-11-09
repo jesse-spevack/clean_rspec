@@ -12,14 +12,17 @@ RSpec.describe GildedRose do
   describe '#tick' do
     context 'normal item' do
       let(:name) { "Normal Item "}
-      subject(:gilded_rose) { described_class.new(name: name, days_remaining: days_remaining, quality: 10)}
+      subject(:gilded_rose) { described_class.new(name: name, days_remaining: days_remaining, quality: 10) }
 
       context 'when item after sell date' do
         let(:days_remaining) { -10 }
-        it 'has the correct quantity and days_remaining' do
-          gilded_rose.tick
-          expect(gilded_rose.days_remaining).to eq(days_remaining - 1)
+
+        before { gilded_rose.tick }
+        it 'reduced the quality' do
           expect(gilded_rose.quality).to eq(8)
+        end
+        it 'reduces days_remaining by one' do
+          expect(gilded_rose.days_remaining).to eq(days_remaining - 1)
         end
       end
     end
