@@ -21,6 +21,19 @@ RSpec.describe GildedRose do
         expect(normal_item.quality).to eq(8)
       end
     end
+
+    context 'when a normal item is on sell date' do
+      subject(:normal_item) { GildedRose.new(name: "Normal Item", days_remaining: 0, quality: 10) }
+
+      before do
+        gr.tick
+      end
+
+      it "decrements days remaining and quality" do        
+        expect(gr.days_remaining).to eq(-1)
+        expect(gr.quality).to eq(8)
+      end
+    end
   end
 
   shared_examples :gilded_rose do |name, days_remaining, quality, expected_days_remaining, expected_quality|
@@ -39,17 +52,6 @@ RSpec.describe GildedRose do
     gr.tick
 
     expect(gr).to have_attributes(days_remaining: 4, quality: 9)
-  end
-
-  it "normal item on sell date" do
-    gr = GildedRose.new(name: "Normal Item", days_remaining: 0, quality: 10)
-
-    expect(gr).to be_instance_of(GildedRose) 
-
-    gr.tick
-
-    expect(gr.days_remaining).to eq(-1)
-    expect(gr.quality).to eq(8)
   end
 
   it "normal item of zero quality" do
