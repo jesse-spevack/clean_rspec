@@ -9,14 +9,28 @@ RSpec.describe GildedRose do
     expect(new_gilded_rose).to be_a(GildedRose)
   end
 
-  it "normal item after sell date" do
-    gr = GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10)
+  describe '#tick' do
+    context 'when the normal item is after sell date' do
+      subject(:expired_gilded_rose) { GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10) }
 
-    gr.tick
+      it 'subtracts 1 from the days remaining and the quality' do
+        expired_gilded_rose.tick
 
-    expect(gr.days_remaining).to eq(-11)
-    expect(gr.quality).to eq(8)
+        expect(fresh_gilded_rose).to have_attributes(days_remaining: -11, quality: 8)
+      end
+    end
+
+    context 'when the normal item is before the sell date' do
+      subject(:fresh_gilded_rose) { GildedRose.new(name: "Normal Item", days_remaining: 5, quality: 10) }
+
+      it 'subtracts 1 from the days remaining and the quality' do
+        fresh_gilded_rose.tick
+
+        expect(fresh_gilded_rose).to have_attributes(days_remaining: 4, quality: 9)
+      end
+    end
   end
+
 
   shared_examples :gilded_rose do |name, days_remaining, quality, expected_days_remaining, expected_quality|
     it 'ticks' do
@@ -26,20 +40,11 @@ RSpec.describe GildedRose do
     end
   end
 
-  it "normal item before sell date" do
-    gr = GildedRose.new(name: "Normal Item", days_remaining: 5, quality: 10)
-    gr2 = GildedRose.new(name: "Normal Item", days_remaining: -1, quality: 8)
-    gr3 = GildedRose.new(name: "Normal Item", days_remaining: 1, quality: 12)
-
-    gr.tick
-
-    expect(gr).to have_attributes(days_remaining: 4, quality: 9)
-  end
 
   it "normal item on sell date" do
     gr = GildedRose.new(name: "Normal Item", days_remaining: 0, quality: 10)
 
-    expect(gr).to be_instance_of(GildedRose) 
+    expect(gr).to be_instance_of(GildedRose)
 
     gr.tick
 
@@ -191,7 +196,7 @@ RSpec.describe GildedRose do
 
   it "backstage passes after sell date" do
     gr = GildedRose.new(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: -10, quality: 10)
-# 
+#
     gr.tick
 
     expect(gr.days_remaining).to eq(-11)
