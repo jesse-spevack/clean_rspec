@@ -58,13 +58,28 @@ RSpec.describe GildedRose do
     expect(gr.quality).to eq(0)
   end
 
-  it_behaves_like :gilded_rose, "Aged Brie", 5, 10, 4, 11
-  it_behaves_like :gilded_rose, "Aged Brie", 5, 50, 4, 50
-  it_behaves_like :gilded_rose, "Aged Brie", 0, 10, -1, 12
-  it_behaves_like :gilded_rose, "Aged Brie", 0, 49, -1, 50
-  it_behaves_like :gilded_rose, "Aged Brie", 0, 50, -1, 50
-  it_behaves_like :gilded_rose, "Aged Brie", -10, 10, -11, 12
-  it_behaves_like :gilded_rose, "Aged Brie", -10, 50, -11, 50
+  context "testing an array of data" do
+
+    let(:data) {
+      [
+        ["Aged Brie", 5, 10, 4, 11],
+        ["Aged Brie", 5, 50, 4, 50],
+        ["Aged Brie", 0, 10, -1, 12],
+        ["Aged Brie", 0, 49, -1, 50],
+        ["Aged Brie", 0, 50, -1, 50],
+        ["Aged Brie", -10, 10, -11, 12],
+        ["Aged Brie", -10, 50, -11, 50]
+      ]
+    }
+
+    it 'ticks' do
+      data.each do |tmp_data|
+        gr = GildedRose.new(name: tmp_data[0], days_remaining: tmp_data[1], quality: tmp_data[2])
+        gr.tick
+        expect(gr).to have_attributes(days_remaining: tmp_data[3], quality: tmp_data[4])
+      end
+    end
+  end
 
   it "sulfuras before sell date" do
     gr = GildedRose.new(name: "Sulfuras, Hand of Ragnaros", days_remaining: 5, quality: 80)
