@@ -57,23 +57,76 @@ RSpec.describe GildedRose do
         end
       end
     end
-  end
 
-  shared_examples :gilded_rose do |name, days_remaining, quality, expected_days_remaining, expected_quality|
-    it 'ticks' do
-      gr = GildedRose.new(name: name, days_remaining: days_remaining, quality: quality)
-      gr.tick
-      expect(gr).to have_attributes(days_remaining: expected_days_remaining, quality: expected_quality)
+    context 'when the item is "Aged Brie"' do
+      context 'when it is before the sell date' do
+        context 'when the quality is less than 50' do
+          let(:fresh_aged_brie_with_low_quality) { GildedRose.new(name: 'Aged Brie', days_remaining: 5, quality: 10) }
+
+          before { fresh_aged_brie_with_low_quality.tick }
+
+          it 'subtracts 1 from the days remaining and adds 1 to the quality' do
+            expect(fresh_aged_brie_with_low_quality).to have_attributes(days_remaining: 4, quality: 11)
+          end
+        end
+
+        context 'when the quality is the maximum (50)' do
+          let(:fresh_aged_brie_with_max_quality) { GildedRose.new(name: 'Aged Brie', days_remaining: 5, quality: 50) }
+
+          before { fresh_aged_brie_with_max_quality.tick }
+
+          it 'subtracts 1 from the days remaining and the quality stays the same' do
+            expect(fresh_aged_brie_with_max_quality).to have_attributes(days_remaining: 4, quality: 50)
+          end
+        end
+      end
+
+      context 'when it is on the sell date' do
+        context 'when it is more than one from max quality' do
+          let(:aged_brie_with_low_quality) { GildedRose.new(name: 'Aged Brie', days_remaining: 0, quality: 10) }
+
+          before { aged_brie_with_low_quality.tick }
+
+          it 'subtracts 1 from the days remaining and adds 2 to the quality' do
+            expect(aged_brie_with_low_quality).to have_attributes(days_remaining: -1, quality: 12)
+          end
+        end
+
+        context 'when it is less than one from max quality' do
+          let(:aged_brie_close_to_max_quality) { GildedRose.new(name: 'Aged Brie', days_remaining: 0, quality: 49) }
+
+          before { aged_brie_close_to_max_quality.tick }
+
+          it 'subtracts 1 from the days remaining and adds 2 to the quality' do
+            expect(aged_brie_close_to_max_quality).to have_attributes(days_remaining: -1, quality: 50)
+          end
+        end
+      end
+
+      context 'when it is after the sell date' do
+        context 'when it is more than one from max quality' do
+          let(:expired_aged_brie_with_low_quality) { GildedRose.new(name: 'Aged Brie', days_remaining: -10, quality: 10) }
+
+          before { expired_aged_brie_with_low_quality.tick }
+
+          it 'subtracts 1 from the days remaining and adds 2 to the quality' do
+            expect(expired_aged_brie_with_low_quality).to have_attributes(days_remaining: -11, quality: 12)
+          end
+        end
+
+        context 'when it is at the max quality' do
+          let(:expired_aged_brie_at_max_quality) { GildedRose.new(name: 'Aged Brie', days_remaining: -10, quality: 50) }
+
+          before { expired_aged_brie_at_max_quality.tick }
+
+          it 'subtracts 1 from the days remaining and adds 2 to the quality' do
+            expect(expired_aged_brie_at_max_quality).to have_attributes(days_remaining: -11, quality: 50)
+          end
+        end
+      end
     end
   end
 
-  it_behaves_like :gilded_rose, "Aged Brie", 5, 10, 4, 11
-  it_behaves_like :gilded_rose, "Aged Brie", 5, 50, 4, 50
-  it_behaves_like :gilded_rose, "Aged Brie", 0, 10, -1, 12
-  it_behaves_like :gilded_rose, "Aged Brie", 0, 49, -1, 50
-  it_behaves_like :gilded_rose, "Aged Brie", 0, 50, -1, 50
-  it_behaves_like :gilded_rose, "Aged Brie", -10, 10, -11, 12
-  it_behaves_like :gilded_rose, "Aged Brie", -10, 50, -11, 50
 
   it "sulfuras before sell date" do
     gr = GildedRose.new(name: "Sulfuras, Hand of Ragnaros", days_remaining: 5, quality: 80)
