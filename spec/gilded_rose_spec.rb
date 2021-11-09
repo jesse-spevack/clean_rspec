@@ -3,18 +3,20 @@ require "./lib/gilded_rose"
 
 RSpec.describe GildedRose do
   let(:name) { 'Normal Item' }
+  subject(:guilded_rose) { GildedRose.new }
 
   it "is a gilded rose" do
-    expect(subject).to be_a(GildedRose)
+    expect(guilded_rose).to be_a(GildedRose)
   end
 
-  it "normal item after sell date" do
-    gr = GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10)
+  context 'with let variables' do
+    let(:gr) { GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10) }
+    it "normal item after sell date" do
+      gr.tick
 
-    gr.tick
-
-    expect(gr.days_remaining).to eq(-11)
-    expect(gr.quality).to eq(8)
+      expect(gr.days_remaining).to eq(-11)
+      expect(gr.quality).to eq(8)
+    end
   end
 
   shared_examples :gilded_rose do |name, days_remaining, quality, expected_days_remaining, expected_quality|
@@ -35,15 +37,16 @@ RSpec.describe GildedRose do
     expect(gr).to have_attributes(days_remaining: 4, quality: 9)
   end
 
-  it "normal item on sell date" do
-    gr = GildedRose.new(name: "Normal Item", days_remaining: 0, quality: 10)
-
-    expect(gr).to be_instance_of(GildedRose) 
-
-    gr.tick
-
-    expect(gr.days_remaining).to eq(-1)
-    expect(gr.quality).to eq(8)
+  context "doing what I was told" do
+    let(:gr) { GildedRose.new(name: "Normal Item", days_remaining: 0, quality: 10) }
+    it "has negative days_remaining" do
+      gr.tick
+      expect(gr.days_remaining).to eq(-1)
+    end
+    it "has a degraded quality of 8" do
+      gr.tick
+      expect(gr.quality).to eq(8)
+    end
   end
 
   it "normal item of zero quality" do
@@ -190,7 +193,7 @@ RSpec.describe GildedRose do
 
   it "backstage passes after sell date" do
     gr = GildedRose.new(name: "Backstage passes to a TAFKAL80ETC concert", days_remaining: -10, quality: 10)
-# 
+#
     gr.tick
 
     expect(gr.days_remaining).to eq(-11)
