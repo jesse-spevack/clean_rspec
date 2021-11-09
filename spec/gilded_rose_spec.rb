@@ -9,15 +9,36 @@ RSpec.describe GildedRose do
     expect(gilded_rose).to be_a(GildedRose)
   end
 
-  context "when the normal item is after the sell date" do
-    let(:gr) { GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10) }
-    it "sets the guilded rose values" do
-      gr.tick
+  describe "#tick" do
+    context "when the normal item is after the sell date" do
+      let(:gr) { GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10) }
+      it "sets the guilded rose attributes correctly" do
+        gr.tick
 
-      expect(gr.days_remaining).to eq(-11)
-      expect(gr.quality).to eq(8)
+        expect(gr.days_remaining).to eq(-11)
+        expect(gr.quality).to eq(8)
+      end
+    end
+
+    context "normal item before sell date" do
+      let(:gr) { GildedRose.new(name: "Normal Item", days_remaining: 5, quality: 10) }
+      it "sets the guilded rose attributes correctly" do
+        gr.tick
+        expect(gr).to have_attributes(days_remaining: 4, quality: 9)
+      end
+    end
+
+    context "normal item on sale date" do
+      gr = GildedRose.new(name: "Normal Item", days_remaining: 0, quality: 10)
+      it "sets the guilded rose attributes correctly" do
+        gr.tick
+        expect(gr.days_remaining).to eq(-1)
+        expect(gr.quality).to eq(8)
+      end
     end
   end
+
+
 
   shared_examples :gilded_rose do |name, days_remaining, quality, expected_days_remaining, expected_quality|
     it 'ticks' do
@@ -26,25 +47,13 @@ RSpec.describe GildedRose do
       expect(gr).to have_attributes(days_remaining: expected_days_remaining, quality: expected_quality)
     end
   end
-
-  it "normal item before sell date" do
-    gr = GildedRose.new(name: "Normal Item", days_remaining: 5, quality: 10)
-    gr2 = GildedRose.new(name: "Normal Item", days_remaining: -1, quality: 8)
-    gr3 = GildedRose.new(name: "Normal Item", days_remaining: 1, quality: 12)
-
-    gr.tick
-
-    expect(gr).to have_attributes(days_remaining: 4, quality: 9)
-  end
-
-  context "normal item on sale date" do
-    gr = GildedRose.new(name: "Normal Item", days_remaining: 0, quality: 10)
-    it "sets the guilded rose attributes correctly" do
-      gr.tick
-      expect(gr.days_remaining).to eq(-1)
-      expect(gr.quality).to eq(8)
-    end
-  end
+  it_behaves_like :gilded_rose, "Aged Brie", 5, 10, 4, 11
+  it_behaves_like :gilded_rose, "Aged Brie", 5, 50, 4, 50
+  it_behaves_like :gilded_rose, "Aged Brie", 0, 10, -1, 12
+  it_behaves_like :gilded_rose, "Aged Brie", 0, 49, -1, 50
+  it_behaves_like :gilded_rose, "Aged Brie", 0, 50, -1, 50
+  it_behaves_like :gilded_rose, "Aged Brie", -10, 10, -11, 12
+  it_behaves_like :gilded_rose, "Aged Brie", -10, 50, -11, 50
 
   it "normal item of zero quality" do
     gr = GildedRose.new(name: name, days_remaining: 5, quality: 0)
@@ -55,13 +64,6 @@ RSpec.describe GildedRose do
     expect(gr.quality).to eq(0)
   end
 
-  it_behaves_like :gilded_rose, "Aged Brie", 5, 10, 4, 11
-  it_behaves_like :gilded_rose, "Aged Brie", 5, 50, 4, 50
-  it_behaves_like :gilded_rose, "Aged Brie", 0, 10, -1, 12
-  it_behaves_like :gilded_rose, "Aged Brie", 0, 49, -1, 50
-  it_behaves_like :gilded_rose, "Aged Brie", 0, 50, -1, 50
-  it_behaves_like :gilded_rose, "Aged Brie", -10, 10, -11, 12
-  it_behaves_like :gilded_rose, "Aged Brie", -10, 50, -11, 50
 
   it "sulfuras before sell date" do
     gr = GildedRose.new(name: "Sulfuras, Hand of Ragnaros", days_remaining: 5, quality: 80)
