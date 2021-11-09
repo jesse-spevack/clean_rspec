@@ -36,6 +36,18 @@ RSpec.describe GildedRose do
         expect(gr.quality).to eq(8)
       end
     end
+
+    context "replace shared examples" do
+      it 'ticks' do
+        gr = GildedRose.new(name: "Aged Brie", days_remaining: 5, quality: 10)
+        gr.tick
+        expect(gr).to have_attributes(days_remaining: 4, quality: 11)
+      end
+
+      it 'ticks2' do
+
+      end
+    end
   end
 
 
