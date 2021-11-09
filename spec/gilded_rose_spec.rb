@@ -24,8 +24,11 @@ RSpec.describe GildedRose do
         }
       end
 
-      it "does something?" do
+      it "reduces the days remaining by 1" do
         expect(gr.days_remaining).to eq(-11)
+      end
+
+      it "reduces the qualify by 2" do
         expect(gr.quality).to eq(8)
       end
     end
