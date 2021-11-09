@@ -3,13 +3,36 @@ require "./lib/gilded_rose"
 
 RSpec.describe GildedRose do
   let(:name) { 'Normal Item' }
+  let(:props) do {} end
+  subject(:gilded_rose) { GildedRose.new props }
 
   it "is a gilded rose" do
-    expect(subject).to be_a(GildedRose)
+    expect(gilded_rose).to be_a(GildedRose)
+  end
+
+  describe "#tick" do
+    before do
+      gilded_rose.tick
+    end
+
+    context "when it is after the sell date" do
+      let(:props) do 
+        {
+          name: "Normal Item",
+          days_remaining: -10,
+          quality: 10
+        }
+      end
+
+      it "does something?" do
+        expect(gr.days_remaining).to eq(-11)
+        expect(gr.quality).to eq(8)
+      end
+    end
   end
 
   it "normal item after sell date" do
-    gr = GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10)
+    gr = GildedRose.new()
 
     gr.tick
 
