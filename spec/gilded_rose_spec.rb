@@ -9,13 +9,14 @@ RSpec.describe GildedRose do
     expect(gilded_rose).to be_a(GildedRose)
   end
 
-  it "normal item after sell date" do
-    gr = GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10)
+  context 'when the days remaining is less than 11' do
+    let!(:gilded_rose) { GildedRose.new(name: 'Normal Item', days_remaining: -10, quality: 10) }
+    it "lowers the quality score" do
+      gilded_rose.tick
 
-    gr.tick
-
-    expect(gr.days_remaining).to eq(-11)
-    expect(gr.quality).to eq(8)
+      expect(gilded_rose.days_remaining).to eq(-11)
+      expect(gilded_rose.quality).to eq(8)
+    end
   end
 
   shared_examples :gilded_rose do |name, days_remaining, quality, expected_days_remaining, expected_quality|
