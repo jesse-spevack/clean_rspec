@@ -2,7 +2,6 @@ require "spec_helper"
 require "./lib/gilded_rose"
 
 RSpec.describe GildedRose do
-  let(:name) { 'Normal Item' }
   subject(:gilded_rose) { GildedRose.new }
 
   it "is a gilded rose" do
@@ -10,16 +9,6 @@ RSpec.describe GildedRose do
   end
 
   context "#tick" do
-    shared_examples :gilded_rose do |name, days_remaining, quality, expected_days_remaining, expected_quality|
-      it 'ticks' do
-        gilded_rose = GildedRose.new(name: name, days_remaining: days_remaining, quality: quality)
-
-        gilded_rose.tick
-
-        expect(gilded_rose).to have_attributes(days_remaining: expected_days_remaining, quality: expected_quality)
-      end
-    end
-    
     context "Normal Item after sell date" do
       let(:gilded_rose) { GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10) }
 
@@ -52,7 +41,7 @@ RSpec.describe GildedRose do
     end
 
     context "Normal Item of zero quality" do
-      let(:gilded_rose) { GildedRose.new(name: name, days_remaining: 5, quality: 0) }
+      let(:gilded_rose) { GildedRose.new(name: "Normal Item", days_remaining: 5, quality: 0) }
 
       it "decrements ONLY days_remaining" do
         gilded_rose.tick
@@ -61,13 +50,75 @@ RSpec.describe GildedRose do
       end
     end
 
-    it_behaves_like :gilded_rose, "Aged Brie", 5, 10, 4, 11
-    it_behaves_like :gilded_rose, "Aged Brie", 5, 50, 4, 50
-    it_behaves_like :gilded_rose, "Aged Brie", 0, 10, -1, 12
-    it_behaves_like :gilded_rose, "Aged Brie", 0, 49, -1, 50
-    it_behaves_like :gilded_rose, "Aged Brie", 0, 50, -1, 50
-    it_behaves_like :gilded_rose, "Aged Brie", -10, 10, -11, 12
-    it_behaves_like :gilded_rose, "Aged Brie", -10, 50, -11, 50
+    context "Aged Brie before sell date with low quality" do
+      let(:gilded_rose) { GildedRose.new(name: "Aged Brie", days_remaining: 5, quality: 10) }
+
+      it "increments quality and decrements days_remaining" do
+        gilded_rose.tick
+
+        expect(gilded_rose).to have_attributes(days_remaining: 4, quality: 11)
+      end
+    end
+
+    context "Aged Brie before sell date with max quality" do
+      let(:gilded_rose) { GildedRose.new(name: "Aged Brie", days_remaining: 5, quality: 50) }
+
+      it "only decrements days_remaining" do
+        gilded_rose.tick
+
+        expect(gilded_rose).to have_attributes(days_remaining: 4, quality: 50)
+      end
+    end
+
+    context "Aged Brie on sell date with low quality" do
+      let(:gilded_rose) { GildedRose.new(name: "Aged Brie", days_remaining: 0, quality: 10) }
+
+      it "increases quality by 2 and decrements days_remaining" do
+        gilded_rose.tick
+
+        expect(gilded_rose).to have_attributes(days_remaining: -1, quality: 12)
+      end
+    end
+
+    context "Aged Brie on sell date near max quality" do
+      let(:gilded_rose) { GildedRose.new(name: "Aged Brie", days_remaining: 0, quality: 49) }
+
+      it "increases quality to max and decrements days_remaining" do
+        gilded_rose.tick
+
+        expect(gilded_rose).to have_attributes(days_remaining: -1, quality: 50)
+      end
+    end
+
+    context "Aged Brie on sell date with max quality" do
+      let(:gilded_rose) { GildedRose.new(name: "Aged Brie", days_remaining: 0, quality: 50) }
+
+      it "only decrements days_remaining" do
+        gilded_rose.tick
+
+        expect(gilded_rose).to have_attributes(days_remaining: -1, quality: 50)
+      end
+    end
+
+    context "Aged Brie after sell date with low quality" do
+      let(:gilded_rose) { GildedRose.new(name: "Aged Brie", days_remaining: -10, quality: 10) }
+
+      it "increases quality by 2 and decrements days_remaining" do
+        gilded_rose.tick
+
+        expect(gilded_rose).to have_attributes(days_remaining: -11, quality: 12)
+      end
+    end
+
+    context "Aged Brie after sell date with max quality" do
+      let(:gilded_rose) { GildedRose.new(name: "Aged Brie", days_remaining: -10, quality: 50) }
+
+      it "only decrements days_remaining" do
+        gilded_rose.tick
+
+        expect(gilded_rose).to have_attributes(days_remaining: -11, quality: 50)
+      end
+    end
 
     it "sulfuras before sell date" do
       gilded_rose = GildedRose.new(name: "Sulfuras, Hand of Ragnaros", days_remaining: 5, quality: 80)
