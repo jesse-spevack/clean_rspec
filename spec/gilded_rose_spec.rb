@@ -11,26 +11,35 @@ RSpec.describe GildedRose do
 
   describe '#tick' do
     context 'when the normal item is after sell date' do
-      subject(:expired_gilded_rose) { GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10) }
+      subject(:expired_normal_gilded_rose) { GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10) }
 
       it 'subtracts 1 from the days remaining and the quality' do
-        expired_gilded_rose.tick
+        expired_normal_gilded_rose.tick
 
-        expect(fresh_gilded_rose).to have_attributes(days_remaining: -11, quality: 8)
+        expect(expired_normal_gilded_rose).to have_attributes(days_remaining: -11, quality: 8)
       end
     end
 
     context 'when the normal item is before the sell date' do
-      subject(:fresh_gilded_rose) { GildedRose.new(name: "Normal Item", days_remaining: 5, quality: 10) }
+      subject(:fresh_normal_gilded_rose) { GildedRose.new(name: "Normal Item", days_remaining: 5, quality: 10) }
 
       it 'subtracts 1 from the days remaining and the quality' do
-        fresh_gilded_rose.tick
+        fresh_normal_gilded_rose.tick
 
-        expect(fresh_gilded_rose).to have_attributes(days_remaining: 4, quality: 9)
+        expect(fresh_normal_gilded_rose).to have_attributes(days_remaining: 4, quality: 9)
+      end
+    end
+
+    context 'when the normal item is on the sell date' do
+      subject(:normal_gilded_rose_on_sell_date) { GildedRose.new(name: "Normal Item", days_remaining: 0, quality: 10) }
+
+      it 'subtracts 1 from the days remaining and subtracts 2 the quality' do
+        normal_gilded_rose_on_sell_date.tick
+
+        expect(normal_gilded_rose_on_sell_date).to have_attributes(days_remaining: -1, quality: 8)
       end
     end
   end
-
 
   shared_examples :gilded_rose do |name, days_remaining, quality, expected_days_remaining, expected_quality|
     it 'ticks' do
@@ -40,17 +49,6 @@ RSpec.describe GildedRose do
     end
   end
 
-
-  it "normal item on sell date" do
-    gr = GildedRose.new(name: "Normal Item", days_remaining: 0, quality: 10)
-
-    expect(gr).to be_instance_of(GildedRose)
-
-    gr.tick
-
-    expect(gr.days_remaining).to eq(-1)
-    expect(gr.quality).to eq(8)
-  end
 
   it "normal item of zero quality" do
     gr = GildedRose.new(name: name, days_remaining: 5, quality: 0)
