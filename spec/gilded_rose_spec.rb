@@ -3,19 +3,20 @@ require "./lib/gilded_rose"
 
 RSpec.describe GildedRose do
   let(:name) { 'Normal Item' }
-  subject(:gilded_rose) { GildedRose.new(name: name) }
+  let(:gr) { GildedRose.new(name: name, days_remaining: -10, quality: 10) }
+  subject(:gilded_rose) { gr }
 
-  it "is a Gilded Rose" do
+  it "is a gilded rose" do
     expect(gilded_rose).to be_a(GildedRose)
   end
 
-  it "normal item after sell date" do
-    gr = GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10)
+  context "when the item has passed its sell-by date" do
+    it "decreases in quality and days remaining" do
+      gilded_rose.tick
 
-    gr.tick
-
-    expect(gr.days_remaining).to eq(-11)
-    expect(gr.quality).to eq(8)
+      expect(gr.days_remaining).to eq(-11)
+      expect(gr.quality).to eq(8)
+    end
   end
 
   shared_examples :gilded_rose do |name, days_remaining, quality, expected_days_remaining, expected_quality|
