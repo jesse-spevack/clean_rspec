@@ -37,15 +37,16 @@ RSpec.describe GildedRose do
     expect(gr).to have_attributes(days_remaining: 4, quality: 9)
   end
 
-  it "normal item on sell date" do
-    gr = GildedRose.new(name: "Normal Item", days_remaining: 0, quality: 10)
-
-    expect(gr).to be_instance_of(GildedRose)
-
-    gr.tick
-
-    expect(gr.days_remaining).to eq(-1)
-    expect(gr.quality).to eq(8)
+  context "doing what I was told" do
+    let(:gr) { GildedRose.new(name: "Normal Item", days_remaining: 0, quality: 10) }
+    it "has negative days_remaining" do
+      gr.tick
+      expect(gr.days_remaining).to eq(-1)
+    end
+    it "has a degraded quality of 8" do
+      gr.tick
+      expect(gr.quality).to eq(8)
+    end
   end
 
   it "normal item of zero quality" do
