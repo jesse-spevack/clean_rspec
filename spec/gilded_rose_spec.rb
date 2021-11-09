@@ -2,12 +2,12 @@ require "spec_helper"
 require "./lib/gilded_rose"
 
 RSpec.describe GildedRose do
-  subject(:new_gilded_rose) { GildedRose.new }
+  describe 'object creation' do
+    subject(:new_gilded_rose) { GildedRose.new }
 
-  let(:name) { 'Normal Item' }
-
-  it "is a gilded rose" do
-    expect(new_gilded_rose).to be_a(GildedRose)
+    it "is a gilded rose" do
+      expect(new_gilded_rose).to be_a(GildedRose)
+    end
   end
 
   describe '#tick' do
@@ -47,7 +47,7 @@ RSpec.describe GildedRose do
 
       context 'when the quality is 0' do
         context 'when the item is before the sell date' do
-          let(:normal_item_with_zero_quality) { GildedRose.new(name: name, days_remaining: 5, quality: 0) }
+          let(:normal_item_with_zero_quality) { GildedRose.new(name: "Normal Item", days_remaining: 5, quality: 0) }
 
           before { normal_item_with_zero_quality.tick }
 
