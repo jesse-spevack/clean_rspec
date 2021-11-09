@@ -7,13 +7,17 @@ RSpec.describe GildedRose do
 
   it { is_expected.to be_a(GildedRose) }
 
-  it "normal item after sell date" do
-    gr = GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10)
+  describe "#tick" do
+    context "when normal item after sell date" do
+      let(:guilded_rose) { described_class.new(name: "Normal Item", days_remaining: -10, quality: 10) }
 
-    gr.tick
+      it "does the tick" do
+        guilded_rose.tick
 
-    expect(gr.days_remaining).to eq(-11)
-    expect(gr.quality).to eq(8)
+        expect(guilded_rose.days_remaining).to eq(-11)
+        expect(guilded_rose.quality).to eq(8)
+      end
+    end
   end
 
   shared_examples :gilded_rose do |name, days_remaining, quality, expected_days_remaining, expected_quality|
