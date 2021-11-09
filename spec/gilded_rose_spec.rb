@@ -21,7 +21,7 @@ RSpec.describe GildedRose do
           expect { gilded_rose.tick }.to change(gilded_rose, :quality).by(-2)
         end
         it 'reduces days_remaining by one' do
-          expect(gilded_rose.days_remaining).to eq(days_remaining - 1)
+          expect { gilded_rose.tick }.to change(gilded_rose, :days_remaining).by(-1)
         end
       end
     end
