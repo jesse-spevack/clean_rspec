@@ -9,6 +9,22 @@ RSpec.describe GildedRose do
     expect(gilded_rose).to be_a(GildedRose)
   end
 
+  describe '#tick' do
+    context 'normal item' do
+      let(:name) { "Normal Item "}
+      subject(:gilded_rose) { described_class.new(name: name, days_remaining: days_remaining, quality: 10)}
+
+      context 'when item after sell date' do
+        let(:days_remaining) { -10 }
+        it 'has the correct quantity and days_remaining' do
+          gilded_rose.tick
+          expect(gilded_rose.days_remaining).to eq(days_remaining - 1)
+          expect(gilded_rose.quality).to eq(8)
+        end
+      end
+    end
+  end
+
   it "normal item after sell date" do
     gr = GildedRose.new(name: "Normal Item", days_remaining: -10, quality: 10)
 
