@@ -17,9 +17,8 @@ RSpec.describe GildedRose do
       context 'when item after sell date' do
         let(:days_remaining) { -10 }
 
-        before { gilded_rose.tick }
         it 'reduced the quality' do
-          expect(gilded_rose.quality).to eq(8)
+          expect { gilded_rose.tick }.to change(gilded_rose, :quality).by(-2)
         end
         it 'reduces days_remaining by one' do
           expect(gilded_rose.days_remaining).to eq(days_remaining - 1)
